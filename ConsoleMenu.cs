@@ -16,7 +16,6 @@ namespace AlfredBr.ConsoleUtilities
         }
         public int Show(string prompt = null)
         {
-            //Console.WriteLine($"{Console.BufferWidth}, {Console.BufferHeight}");
             Console.WriteLine();
             if (prompt is not null)
             {
