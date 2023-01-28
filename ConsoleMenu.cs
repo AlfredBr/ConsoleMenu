@@ -17,45 +17,45 @@ namespace AlfredBr.ConsoleUtilities
         public int Show(string prompt = null)
         {
             Console.WriteLine();
-            if (prompt is not null)
-            {
-                Console.WriteLine(prompt);
-            }
-            else if (Prompt is not null)
-            {
-                Console.WriteLine(Prompt);
-            }
+            Console.WriteLine(prompt ?? Prompt);
             DisplayMenu();
             SetMenuIndicatorToPosition(0);
             return WaitForUserMenuSelection();
         }
         public int WaitForUserMenuSelection()
         {
-            var p = 0;
-            ConsoleKeyInfo keyInfo;
-            do
-            {
-                keyInfo = Console.ReadKey(true);
-
-                switch (keyInfo.Key)
+            try {
+                var p = 0;
+                ConsoleKeyInfo keyInfo;
+                do
                 {
-                    case ConsoleKey.DownArrow:
-                        p = Math.Min(++p, Items.Length - 1);
-                        SetMenuIndicatorToPosition(p);
-                        break;
-                    case ConsoleKey.UpArrow:
-                        p = Math.Max(0, --p);
-                        SetMenuIndicatorToPosition(p);
-                        break;
-                    case ConsoleKey.Enter:
-                        this.OnSelection?.Invoke(p);
-                        return p;
-                    default:
-                        // do nothing on other keys (for now)
-                        break;
-                }
-            } while (keyInfo.Key != ConsoleKey.Escape);
-            return -1;
+                    Console.CursorVisible = false;
+                    keyInfo = Console.ReadKey(true);
+
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.DownArrow:
+                            p = Math.Min(++p, Items.Length - 1);
+                            SetMenuIndicatorToPosition(p);
+                            break;
+                        case ConsoleKey.UpArrow:
+                            p = Math.Max(0, --p);
+                            SetMenuIndicatorToPosition(p);
+                            break;
+                        case ConsoleKey.Enter:
+                            this.OnSelection?.Invoke(p);
+                            return p;
+                        default:
+                            // do nothing on other keys (for now)
+                            break;
+                    }
+                } while (keyInfo.Key != ConsoleKey.Escape);
+                return -1;
+            }
+            finally
+            {
+                Console.CursorVisible = true;
+            }
         }
         private void DisplayMenu()
         {
